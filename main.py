@@ -14,6 +14,8 @@ blocks = pygame.sprite.Group()
 for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
     block = Block(Block.BLOCKSIZE*i,300)
     blocks.add(block)
+block = Block(Block.BLOCKSIZE+100,250)
+blocks.add(block)
 
 
 while True:
@@ -22,8 +24,8 @@ while True:
             pygame.quit()
     keys = pygame.key.get_pressed()
     
-    player.update(keys)
-    blocks.update()
+    player.update(keys,blocks)
+    blocks.update(player.rect)
 
     screen.fill("light blue")
     blocks.draw(screen)
