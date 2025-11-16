@@ -10,23 +10,25 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         self.rect.x = posx
         self.rect.y = posy
 
-    def update(self,player_rect): #screen offsetting and other
-        self.collisions(player_rect)
+    def update(self,screen,player_rect): #screen offsetting and other
+        self.draw(screen)
+        if self.rect.colliderect(player_rect):
+            self.collisions(player_rect)
         
     def draw(self,screen):
         screen.blit(self.image,self.rect)
 
     def collisions(self,player_rect):
-        if self.rect.colliderect(player_rect):
-            if self.rect.top <= player_rect.bottom:
-                player_rect.y = self.rect.top-45
-                print("if 1")
-            elif self.rect.bottom <= player_rect.top:
-                player_rect.y = self.rect.bottom+1
-                print("if 2")
-            if self.rect.left <= player_rect.right and player_rect.y > self.rect.top and player_rect.y < self.rect.bottom:
-                player_rect.x = self.rect.left-1
-                print("if 3")
-            elif self.rect.right >= player_rect.left and player_rect.y > self.rect.top and player_rect.y < self.rect.bottom:
-                player_rect.x = self.rect.right+1
-                print("if 4")
+        if self.rect.left >= player_rect.right and player_rect.bottom > self.rect.top:
+            player_rect.x = self.rect.left-1
+            # print("if 3")
+        if self.rect.right <= player_rect.left and player_rect.bottom > self.rect.top:
+            player_rect.x = self.rect.right+1
+            # print("if 4")
+        if self.rect.top <= player_rect.bottom and self.rect.left < player_rect.right and self.rect.right > player_rect.left:
+            player_rect.y = self.rect.top-49
+            # print("if 1")
+        if self.rect.bottom <= player_rect.top and self.rect.left < player_rect.right and self.rect.right > player_rect.left:
+            player_rect.y = self.rect.bottom+1
+            # print("if 2")
+        

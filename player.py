@@ -3,7 +3,7 @@ import constants
 class Player():
     PLAYERSPEED = 5
     def __init__(self,posx,posy):
-        self.image = pygame.Surface([25,45])
+        self.image = pygame.Surface([25,50])
         self.image.fill("red")
         self.rect = self.image.get_rect()
         self.rect.x = posx
@@ -16,7 +16,8 @@ class Player():
         screen.blit(self.image,self.rect)
 
         
-    def update(self,keys,blocks):
+    def update(self,screen,keys,blocks,money):
+        self.draw(screen)
         if keys[pygame.K_a]:
             self.rect.x -= self.PLAYERSPEED
             if self.rect.x < 0:
@@ -28,7 +29,8 @@ class Player():
         if keys[pygame.K_w] and self.onground(blocks):
             self.velocity = constants.PLAYERVELOCITY
             self.jump = True
-        print(self.onground(blocks))
+        
+
         if self.onground(blocks) == False:
             self.jump = True
 
