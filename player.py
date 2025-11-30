@@ -45,12 +45,12 @@ class Player():
         self.speed.y -= self.gravity
         
         if self.onground(blocks):
+            print('hi')
             self.speed.y = 0
             self.jump = False
 
     def onground(self, blocks):
         for block in blocks:
-            
             if block.rect.colliderect(self.rect):
                 self.rect.y -= 1
                 return True
