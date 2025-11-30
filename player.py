@@ -39,29 +39,31 @@ class Player():
 
         if self.jump:
             self.jumping(blocks)
-    def jumping(self,blocks):
-        
 
-        self.rect.y-=self.speed.y
-        self.speed.y-=self.gravity
+    def jumping(self, blocks):
+        self.rect.y -= self.speed.y
+        self.speed.y -= self.gravity
         
         if self.onground(blocks):
             self.speed.y = 0
             self.jump = False
 
-    def onground(self,blocks):
+    def onground(self, blocks):
         for block in blocks:
+            
             if block.rect.colliderect(self.rect):
+                self.rect.y -= 1
                 return True
         return False
     
-    def colliding(self,block):
+    def colliding(self, block):
         if self.speed.x >= self.rect.right - block.rect.left:
             self.speed.x = 0
-            self.rect.right = block.rect.left-1
+            
+            self.rect.right = block.rect.left
         if self.speed.x <= self.rect.left - block.rect.right:
             self.speed.x = 0
-            self.rect.left = block.rect.right+1
+            self.rect.left = block.rect.right
         if self.speed.y >= self.rect.bottom - block.rect.top:
             self.speed.y = 0
             self.rect.bottom = block.rect.top-1
