@@ -45,7 +45,6 @@ class Player():
         self.speed.y -= self.gravity
         
         if self.onground(blocks):
-            print('hi')
             self.speed.y = 0
             self.jump = False
 
