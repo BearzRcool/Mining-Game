@@ -3,7 +3,7 @@ import constants
 
 class Shop(pygame.sprite.Sprite):
     def __init__(self,posx,posy):
-        self.image = pygame.image.load("shopkeeper.png").convert_alpha()
+        self.image = pygame.image.load("Images/shopkeeper.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(50,50))
         self.rect = self.image.get_rect()
         self.rect.y = posy

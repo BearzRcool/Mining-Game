@@ -6,7 +6,7 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
     BLOCKSIZE = 50
     def __init__(self, posx, posy):
         pygame.sprite.Sprite.__init__(self,blocks) #initializing the sprite class
-        self.image = pygame.image.load("grass.png").convert_alpha()
+        self.image = pygame.image.load("Images/grass.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(self.BLOCKSIZE,self.BLOCKSIZE))
         self.rect = self.image.get_rect()
         self.rect.x = posx

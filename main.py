@@ -1,5 +1,6 @@
 import pygame
 import random
+from drill import Drill
 from player import Player
 from block import *
 from shopkeeper import Shop
@@ -14,6 +15,7 @@ money = 10
 
 player = Player(200,250)
 
+drill = Drill(-10,-10)
 
 for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
     block = Block(Block.BLOCKSIZE*i,300)
@@ -33,11 +35,12 @@ while True:
             money = 1000
 
     screen.fill("light blue")
-
+    drill.update(screen)
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)
-    player.update(screen,keys,blocks,money)
+    player.update(screen,keys,blocks,drill)
+    print ("x " + str(player.rect.x) + " y " + str(player.rect.y))
     #shopkeeper.update(screen,player.rect, money)
 
 
