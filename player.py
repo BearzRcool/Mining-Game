@@ -30,9 +30,23 @@ class Player():
             self.speed.x += self.PLAYERSPEED
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
+        #drill
         if keys[pygame.K_RIGHT]:
             drill.rect.x = self.rect.x + 10
-            drill.rect.y = self.rect.y + 10
+            drill.rect.y = self.rect.y
+            drill.update(screen)
+        elif keys[pygame.K_LEFT]:
+            drill.rect.x = self.rect.x - 30
+            drill.rect.y = self.rect.y
+            drill.update(screen)
+        elif keys[pygame.K_UP]:
+            drill.rect.x = self.rect.x
+            drill.rect.y = self.rect.y - 50
+            drill.update(screen)
+        elif keys[pygame.K_DOWN]:
+            drill.rect.x = self.rect.x
+            drill.rect.y = self.rect.y + 30
+            drill.update(screen)
         if keys[pygame.K_w] and self.onground(blocks):
             self.speed.y = constants.PLAYERVELOCITY
             self.jump = True
@@ -73,3 +87,4 @@ class Player():
         if self.speed.y <= self.rect.top - block.rect.bottom:
             self.speed.y = 0
             self.rect.top = block.rect.bottom+1
+

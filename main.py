@@ -35,11 +35,12 @@ while True:
             money = 1000
 
     screen.fill("light blue")
-    drill.update(screen)
+    
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)
     player.update(screen,keys,blocks,drill)
+    
     print ("x " + str(player.rect.x) + " y " + str(player.rect.y))
     #shopkeeper.update(screen,player.rect, money)
 
