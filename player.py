@@ -4,8 +4,11 @@ import constants
 class Player():
     PLAYERSPEED = 5
     def __init__(self,posx,posy):
-        self.image = pygame.image.load("Images/player.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image,(25,50))
+        #self.image = pygame.image.load("Images/player.png").convert_alpha()
+        #self.image = pygame.transform.scale(self.image,(25,50))
+        self.image = pygame.Surface((25, 50))
+        self.image.fill("red")
+      
         self.rect = self.image.get_rect()
         self.rect.x = posx
         self.rect.y = posy
@@ -20,6 +23,35 @@ class Player():
     def update(self,screen,keys,blocks,drill):
         self.speed.x = 0
         self.draw(screen)
+         #drill ROTATING NOT WORKING
+        if keys[pygame.K_RIGHT]:
+            drill.rect.x = self.rect.x + 25
+            drill.rect.y = self.rect.y + 20
+            drill.update(screen)
+        elif keys[pygame.K_LEFT]:
+            drill.rect.x = self.rect.x - 20
+            drill.rect.y = self.rect.y + 20
+            drill_rotate = pygame.transform.rotate(drill.image, 180)
+            drill_rect = drill_rotate.get_rect(center=drill.rect.center)
+            drill.update(screen)
+            
+        elif keys[pygame.K_UP]:
+            drill.rect.x = self.rect.x + 3
+            drill.rect.y = self.rect.y - 20
+            drill = pygame.transform.rotate(drill.image, 90)
+            drill_rect = drill.get_rect(center=drill.rect.center)
+            drill.update(screen)
+            
+
+        elif keys[pygame.K_DOWN]:
+            drill.rect.x = self.rect.x + 3
+            drill.rect.y = self.rect.y + 50
+            drill_rotate = pygame.transform.rotate(drill.image, -90)
+            drill_rect = drill_rotate.get_rect(center=drill.rect.center)
+            drill.rect = drill_rect
+            drill.update(screen)
+            
+        #movement
         if keys[pygame.K_a]:
             self.rect.x -= self.PLAYERSPEED
             self.speed.x = -self.PLAYERSPEED
@@ -30,23 +62,7 @@ class Player():
             self.speed.x += self.PLAYERSPEED
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
-        #drill
-        if keys[pygame.K_RIGHT]:
-            drill.rect.x = self.rect.x + 10
-            drill.rect.y = self.rect.y
-            drill.update(screen)
-        elif keys[pygame.K_LEFT]:
-            drill.rect.x = self.rect.x - 30
-            drill.rect.y = self.rect.y
-            drill.update(screen)
-        elif keys[pygame.K_UP]:
-            drill.rect.x = self.rect.x
-            drill.rect.y = self.rect.y - 50
-            drill.update(screen)
-        elif keys[pygame.K_DOWN]:
-            drill.rect.x = self.rect.x
-            drill.rect.y = self.rect.y + 30
-            drill.update(screen)
+        #jump
         if keys[pygame.K_w] and self.onground(blocks):
             self.speed.y = constants.PLAYERVELOCITY
             self.jump = True

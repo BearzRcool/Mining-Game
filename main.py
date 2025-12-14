@@ -15,7 +15,7 @@ money = 10
 
 player = Player(200,250)
 
-drill = Drill(-10,-10)
+drill = Drill(0,0)
 
 for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
     block = Block(Block.BLOCKSIZE*i,300)
@@ -34,14 +34,14 @@ while True:
     if keys[pygame.K_m]:
             money = 1000
 
-    screen.fill("light blue")
+    screen.fill("blue")
     
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)
     player.update(screen,keys,blocks,drill)
     
-    print ("x " + str(player.rect.x) + " y " + str(player.rect.y))
+    #print ("x " + str(player.rect.x) + " y " + str(player.rect.y))
     #shopkeeper.update(screen,player.rect, money)
 
 
