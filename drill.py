@@ -7,6 +7,8 @@ class Drill(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = posy 
         self.rect.x = posx
+        self.drill_state = ""
+        self.original_image = self.image
     
     def draw(self,screen):
         screen.blit(self.image,self.rect)

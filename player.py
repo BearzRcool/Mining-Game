@@ -25,30 +25,38 @@ class Player():
         self.draw(screen)
          #drill ROTATING NOT WORKING
         if keys[pygame.K_RIGHT]:
+            if drill.drill_state != 'right':
+                drill.drill_state = 'right'
+                drill.image = drill.original_image
             drill.rect.x = self.rect.x + 25
             drill.rect.y = self.rect.y + 20
             drill.update(screen)
         elif keys[pygame.K_LEFT]:
+            if drill.drill_state != 'left':
+                drill.image = pygame.transform.rotate(drill.original_image, 180)
+                drill.rect = drill.image.get_rect(center=drill.rect.center)
+                drill.drill_state = 'left'  
             drill.rect.x = self.rect.x - 20
             drill.rect.y = self.rect.y + 20
-            drill_rotate = pygame.transform.rotate(drill.image, 180)
-            drill_rect = drill_rotate.get_rect(center=drill.rect.center)
             drill.update(screen)
             
         elif keys[pygame.K_UP]:
+            if drill.drill_state != 'up':
+                drill.drill_state = 'up'
+                drill.image = pygame.transform.rotate(drill.original_image, 90)
+                drill.rect = drill.image.get_rect(center=drill.rect.center)
             drill.rect.x = self.rect.x + 3
             drill.rect.y = self.rect.y - 20
-            drill = pygame.transform.rotate(drill.image, 90)
-            drill_rect = drill.get_rect(center=drill.rect.center)
             drill.update(screen)
             
 
         elif keys[pygame.K_DOWN]:
+            if drill.drill_state != 'down':
+                drill.drill_state = 'down'
+                drill.image = pygame.transform.rotate(drill.original_image, -90)
+                drill.rect = drill.image.get_rect(center=drill.rect.center)
             drill.rect.x = self.rect.x + 3
             drill.rect.y = self.rect.y + 50
-            drill_rotate = pygame.transform.rotate(drill.image, -90)
-            drill_rect = drill_rotate.get_rect(center=drill.rect.center)
-            drill.rect = drill_rect
             drill.update(screen)
             
         #movement
@@ -86,7 +94,9 @@ class Player():
     def onground(self, blocks):
         for block in blocks:
             if self.rect.bottom <= block.rect.top+2 and self.rect.bottom >= block.rect.top - 2:
-                if block.rect.colliderect(self.rect):
+                if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
+                    return True
+                if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
                     return True
         return False
     
