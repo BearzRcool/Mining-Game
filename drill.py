@@ -4,6 +4,8 @@ class Drill(pygame.sprite.Sprite):
     def __init__(self,posx,posy):
         self.image = pygame.image.load("Images/drill.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(33,33))
+        #self.image = pygame.Surface((33,33))
+        #self.image.fill("yellow")
         self.rect = self.image.get_rect()
         self.rect.y = posy 
         self.rect.x = posx

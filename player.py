@@ -29,15 +29,15 @@ class Player():
                 drill.drill_state = 'right'
                 drill.image = drill.original_image
             drill.rect.x = self.rect.x + 25
-            drill.rect.y = self.rect.y + 20
+            drill.rect.y = self.rect.y + 15 
             drill.update(screen)
         elif keys[pygame.K_LEFT]:
             if drill.drill_state != 'left':
                 drill.image = pygame.transform.rotate(drill.original_image, 180)
                 drill.rect = drill.image.get_rect(center=drill.rect.center)
                 drill.drill_state = 'left'  
-            drill.rect.x = self.rect.x - 20
-            drill.rect.y = self.rect.y + 20
+            drill.rect.x = self.rect.x - 30
+            drill.rect.y = self.rect.y + 15 
             drill.update(screen)
             
         elif keys[pygame.K_UP]:
@@ -45,7 +45,7 @@ class Player():
                 drill.drill_state = 'up'
                 drill.image = pygame.transform.rotate(drill.original_image, 90)
                 drill.rect = drill.image.get_rect(center=drill.rect.center)
-            drill.rect.x = self.rect.x + 3
+            drill.rect.x = self.rect.x - 5
             drill.rect.y = self.rect.y - 20
             drill.update(screen)
             
@@ -55,10 +55,15 @@ class Player():
                 drill.drill_state = 'down'
                 drill.image = pygame.transform.rotate(drill.original_image, -90)
                 drill.rect = drill.image.get_rect(center=drill.rect.center)
-            drill.rect.x = self.rect.x + 3
-            drill.rect.y = self.rect.y + 50
+            drill.rect.x = self.rect.x - 5
+            drill.rect.y = self.rect.y + 40
             drill.update(screen)
             
+        drill_check = self.drill_colliding(blocks,drill)
+        if drill_check:
+            blocks.remove(drill_check)
+            #drill_check.image.fill("green")
+
         #movement
         if keys[pygame.K_a]:
             self.rect.x -= self.PLAYERSPEED
@@ -93,11 +98,11 @@ class Player():
 
     def onground(self, blocks):
         for block in blocks:
-            if self.rect.bottom <= block.rect.top+2 and self.rect.bottom >= block.rect.top - 2:
+            if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
                 if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
-                    return True
+                    return block #block you are standing on
                 if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
-                    return True
+                    return block #block you are standing on
         return False
     
     def colliding(self, block):
@@ -113,4 +118,32 @@ class Player():
         if self.speed.y <= self.rect.top - block.rect.bottom:
             self.speed.y = 0
             self.rect.top = block.rect.bottom+1
+    def drill_colliding(self,blocks,drill): #return a block
+        for block in blocks:
+            if drill.drill_state == "up":
+                drill_top = drill.rect.midtop
+                if drill_top[1] <= block.rect.bottom and drill_top[1] >= block.rect.top:
+                    if drill_top[0] <= block.rect.right and drill_top[0] >= block.rect.left:
+                        return block #block you are drilling
+                    # if drill_top.x >= block.rect.left and drill_top.x <= block.rect.right:
+                    #     return block #block you are drilling
+            if drill.drill_state == "down":
+                drill_bottom = drill.rect.midbottom
+                if drill_bottom[1] >= block.rect.top and drill_bottom[1] <= block.rect.bottom:
+                    if drill_bottom[0] <= block.rect.right and drill_bottom[0] >= block.rect.left:
+                        return block #block you are drilling
+            if drill.drill_state == "left":
+                drill_left = drill.rect.midleft
+                if drill_left[1] >= block.rect.top and drill_left[1] <= block.rect.bottom:
+                    if drill_left[0] <= block.rect.right and drill_left[0] >= block.rect.left:
+                        return block #block you are drilling
+            if drill.drill_state == "right":
+                drill_right = drill.rect.midright
+                if drill_right[1] >= block.rect.top and drill_right[1] <= block.rect.bottom:
+                    if drill_right[0] <= block.rect.right and drill_right[0] >= block.rect.left:
+                        return block #block you are drilling
+        return False
+        
+
+        
 

@@ -26,10 +26,10 @@ money = 10
 player = Player(200,250)
 
 drill = Drill(0,0)
+for j in range(0,5):
+    for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
+        block = Block(Block.BLOCKSIZE*i,300+j*Block.BLOCKSIZE)
 
-for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
-    block = Block(Block.BLOCKSIZE*i,300)
-    
 block = Block(Block.BLOCKSIZE+100,250)
 
 
