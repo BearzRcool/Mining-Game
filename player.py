@@ -23,7 +23,7 @@ class Player():
     def update(self,screen,keys,blocks,drill):
         self.speed.x = 0
         self.draw(screen)
-         #drill ROTATING NOT WORKING
+
         if keys[pygame.K_RIGHT]:
             if drill.drill_state != 'right':
                 drill.drill_state = 'right'
@@ -108,16 +108,18 @@ class Player():
     def colliding(self, block):
         if self.speed.x >= self.rect.right - block.rect.left:
             self.speed.x = 0
-            self.rect.right = block.rect.left
+            self.rect.right = block.rect.left-1
         if self.speed.x <= self.rect.left - block.rect.right:
             self.speed.x = 0
-            self.rect.left = block.rect.right
+            self.rect.left = block.rect.right+1
         if self.speed.y >= self.rect.bottom - block.rect.top:
             self.speed.y = 0
             self.rect.bottom = block.rect.top
-        if self.speed.y <= self.rect.top - block.rect.bottom:
-            self.speed.y = 0
-            self.rect.top = block.rect.bottom+1
+        # if self.speed.y <= self.rect.top - block.rect.bottom:
+        #     self.speed.y = 0
+        #     self.rect.top = block.rect.bottom+1
+
+            
     def drill_colliding(self,blocks,drill): #return a block
         for block in blocks:
             if drill.drill_state == "up":
