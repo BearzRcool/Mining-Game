@@ -4,7 +4,7 @@ blocks = pygame.sprite.Group()
 touching = pygame.sprite.Group()
 class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
     BLOCKSIZE = 50
-    def __init__(self, posx, posy):
+    def __init__(self, posx, posy, destructable=True):
         pygame.sprite.Sprite.__init__(self,blocks) #initializing the sprite class
         self.image = pygame.image.load("Images/grass.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(self.BLOCKSIZE,self.BLOCKSIZE))
@@ -12,6 +12,7 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         self.rect.x = posx
         self.rect.y = posy
         self.player = None
+        self.destructable = destructable
 
     def update(self,screen,player_rect): #screen offsetting and other
         self.draw(screen)
@@ -21,4 +22,3 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
     def draw(self,screen):
         screen.blit(self.image,self.rect)
 
-    

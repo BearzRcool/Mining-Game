@@ -1,5 +1,6 @@
 import pygame
 import constants
+from block import Block
 
 class Player():
     PLAYERSPEED = 5
@@ -20,7 +21,7 @@ class Player():
         screen.blit(self.image,self.rect)
 
         
-    def update(self,screen,keys,blocks,drill):
+    def update(self,screen,keys,blocks,drill,plane):
         self.speed.x = 0
         self.draw(screen)
 
@@ -60,7 +61,8 @@ class Player():
             drill.update(screen)
             
         drill_check = self.drill_colliding(blocks,drill)
-        if drill_check:
+        if drill_check and drill_check.destructable == True:
+            drill_check.x = 1000
             blocks.remove(drill_check)
             #drill_check.image.fill("green")
 
@@ -75,6 +77,13 @@ class Player():
             self.speed.x += self.PLAYERSPEED
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
+        if keys[pygame.K_s] and self.onground(blocks):#placing block beneath you so no softlock, check if block beneath is beind drawn,s check if player.y - blocksize is a divisable by blocksize (%), and then move it to a placew where it is
+            for block in blocks:
+                    pass
+
+                # if not block.collidepoint(self.rect.x, (self.rect.y + Block.BLOCKSIZE)):
+                #     if (self.rect.y - Block.BLOCKSIZE)% Block.BLOCKSIZE
+                #     place = Block(Block.BLOCKSIZE,Block.BLOCKSIZE)
         #jump
         if keys[pygame.K_w] and self.onground(blocks):
             self.speed.y = constants.PLAYERVELOCITY
@@ -115,10 +124,6 @@ class Player():
         if self.speed.y >= self.rect.bottom - block.rect.top:
             self.speed.y = 0
             self.rect.bottom = block.rect.top
-        # if self.speed.y <= self.rect.top - block.rect.bottom:
-        #     self.speed.y = 0
-        #     self.rect.top = block.rect.bottom+1
-
             
     def drill_colliding(self,blocks,drill): #return a block
         for block in blocks:

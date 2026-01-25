@@ -28,11 +28,14 @@ shopkeeper.gamemode = "main"
 money = 10
 
 player = Player(200,250)
-
+plane = [[],[],[],[],[]]
 drill = Drill(0,0)
-for j in range(0,5):
+for rows in range(0,5):
     for i in range(constants.SCREENWIDTH // Block.BLOCKSIZE +1):
-        block = Block(Block.BLOCKSIZE*i,300+j*Block.BLOCKSIZE)
+        if i <= 2 and rows == 0:
+            block = Block(Block.BLOCKSIZE*i,300+rows*Block.BLOCKSIZE, False)
+        block = Block(Block.BLOCKSIZE*i,300+rows*Block.BLOCKSIZE)
+        plane[rows].append((block.rect.x,block.rect.y))
 
 block = Block(Block.BLOCKSIZE+100,250)
 
@@ -51,7 +54,7 @@ def MainScreen():
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)
-    player.update(screen,keys,blocks,drill)
+    player.update(screen,keys,blocks,drill,plane)
     
     
     
