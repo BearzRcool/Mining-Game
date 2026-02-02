@@ -20,12 +20,26 @@ shop_exit_rect = shop_exit.get_rect()
 shop_exit_rect.x = 375
 shop_exit_rect.y = 25
 
+shop_sell = pygame.Surface((25, 25))
+shop_sell.fill("green")
+shop_sell_rect = shop_sell.get_rect()
+shop_sell_rect.x = 200
+shop_sell_rect.y = 300
+
+#TEXT:
+font = pygame.font.SysFont("Arial", 10)
+
+global grass
+global ore 
+grass = 0
+ore = 0
+
+
 
 shopkeeper = Shop(70,250)
 
 shopkeeper.gamemode = "main"
 
-money = 10
 
 player = Player(200,250)
 plane = [[],[],[],[],[]]
@@ -41,16 +55,32 @@ block = Block(Block.BLOCKSIZE+100,250)
 
 
 def MainScreen():
+    grass = 0
+    ore = 0
+    money = Player.money
     touching.empty()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
     keys = pygame.key.get_pressed()
     if keys[pygame.K_m]:
-            money = 1000
+            Player.money = 1000
+
+    for item in Player.inventory:
+        if item == "grass":
+            grass +=1
+        elif item =="ore":
+            ore +=1
+    
+    text_surface = font.render(f"Inventory: \n money: {money} \ngrass: {grass}\n ore: {ore}", True, (0,0,0))
+
+    # inventory_surface = font.render("", True, (0,0,0)) tried to make surface of text surfaces, didnt work
+    # inventory_surface.blit(font.render("Inventory: ", True, (0,0,0)), (0,0))
+    # inventory_surface.blit(font.render(f"grass: {grass}", True, (0,0,0)), (0,10))
+    # inventory_surface.blit(font.render(f"ore: {ore}", True, (0,0,0)), (0,20))
 
     screen.fill("blue")
-    
+    screen.blit(text_surface, (0,0))
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)
@@ -61,12 +91,13 @@ def MainScreen():
 def ShopScreen():
     screen.blit(shop_background,(0,0))
     screen.blit(shop_exit, shop_exit_rect)
-    shopkeeper.update(screen,player.rect, money, shop_exit_rect)
+    screen.blit(shop_sell, shop_sell_rect)
+    shopkeeper.update(screen,player.rect, Player.money, shop_exit_rect,shop_sell_rect)
 
 while True:
     if shopkeeper.gamemode == "main":
         MainScreen()
-        shopkeeper.update(screen,player.rect, money, shop_exit_rect)
+        shopkeeper.update(screen,player.rect, Player.money, shop_exit_rect, shop_sell_rect)
     elif shopkeeper.gamemode == "shop":
         ShopScreen()
         

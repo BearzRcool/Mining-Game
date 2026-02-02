@@ -4,6 +4,8 @@ from block import Block
 
 class Player():
     PLAYERSPEED = 5
+    inventory = []
+    money = 0
     def __init__(self,posx,posy):
         #self.image = pygame.image.load("Images/player.png").convert_alpha()
         #self.image = pygame.transform.scale(self.image,(25,50))
@@ -63,8 +65,10 @@ class Player():
         drill_check = self.drill_colliding(blocks,drill)
         if drill_check and drill_check.destructable == True:
             drill_check.x = 1000
+            
+            self.inventory.append(drill_check.type)
+            print(self.inventory)
             blocks.remove(drill_check)
-            #drill_check.image.fill("green")
 
         #movement
         if keys[pygame.K_a]:

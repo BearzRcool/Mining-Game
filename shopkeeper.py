@@ -1,6 +1,6 @@
 import pygame
 import constants
-
+from player import Player
 class Shop(pygame.sprite.Sprite):
     def __init__(self,posx,posy):
         #self.image = pygame.image.load("Images/shopkeeper.png").convert_alpha()
@@ -22,30 +22,33 @@ class Shop(pygame.sprite.Sprite):
     def draw(self,screen):
         screen.blit(self.image,self.rect)
 
-    def update(self,screen,player_rect,money,exit_button):
+    def update(self,screen,player_rect,money,exit,sell):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-        self.draw(screen)
+        if self.gamemode != 'shop':
+            self.draw(screen)
         if self.rect.colliderect(player_rect):
             self.gamemode = 'shop'
-            self.shop(money,player_rect,exit_button)
+            self.shop(money,player_rect,exit,sell)
     
-    def shop(self, money,player_rect, exit_button):
+    def shop(self, money,player_rect, exit,sell):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if exit_button.collidepoint(mouse):
+       
+        if exit.collidepoint(mouse):
             if click[0]:
                 player_rect.x += 50  # Move player away from shopkeeper to avoid immediate re-entry
                 self.gamemode = "main"
-        # items = self.items.keys()
-        # item = input("What do you want to buy?").lower()
-        # if item in list(items):
-        #     if money >= self.items[item]:
-        #         chosen_item = self.items.pop(item)
-        #         money -= chosen_item
-        #         print(money)
-        #         print(items)
+        elif sell.collidepoint(mouse):
+            if click[0]:
+                for item in Player.inventory:
+                    if item == 'grass':
+                        Player.money += 1
+                    elif item == 'ore':
+                        Player.money += 5
+                Player.inventory.clear()
+                print(Player.money)
             
 
         

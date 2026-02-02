@@ -1,5 +1,6 @@
 import pygame
 import constants
+import random
 blocks = pygame.sprite.Group()
 touching = pygame.sprite.Group()
 class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
@@ -13,6 +14,7 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         self.rect.y = posy
         self.player = None
         self.destructable = destructable
+        self.type = random.choice(["grass","ore"])
 
     def update(self,screen,player_rect): #screen offsetting and other
         self.draw(screen)
