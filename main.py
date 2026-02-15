@@ -27,7 +27,7 @@ shop_sell_rect.x = 200
 shop_sell_rect.y = 300
 
 #TEXT:
-font = pygame.font.SysFont("Arial", 10)
+font = pygame.font.SysFont("Arial", 20)
 
 global grass
 global ore 
@@ -72,15 +72,21 @@ def MainScreen():
         elif item =="ore":
             ore +=1
     
-    text_surface = font.render(f"Inventory: \n money: {money} \ngrass: {grass}\n ore: {ore}", True, (0,0,0))
+    text_surface1 = font.render(f"Money: {money}", True, (0,0,0))
+    text_surface2 = font.render(f"Grass: {grass}", True, (0,0,0))
+    text_surface3 = font.render(f"Ore: {ore}", True, (0,0,0))
 
+    
+    
     # inventory_surface = font.render("", True, (0,0,0)) tried to make surface of text surfaces, didnt work
     # inventory_surface.blit(font.render("Inventory: ", True, (0,0,0)), (0,0))
     # inventory_surface.blit(font.render(f"grass: {grass}", True, (0,0,0)), (0,10))
     # inventory_surface.blit(font.render(f"ore: {ore}", True, (0,0,0)), (0,20))
 
     screen.fill("blue")
-    screen.blit(text_surface, (0,0))
+    screen.blit(text_surface1, (0,0))
+    screen.blit(text_surface2, (0,25))
+    screen.blit(text_surface3, (0,50))
     blocks.update(screen,player.rect)
     for c in touching:
         player.colliding(c)

@@ -13,7 +13,9 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         self.rect.x = posx
         self.rect.y = posy
         self.player = None
+        self.destroyed = False
         self.destructable = destructable
+        # if isLadder == True:
         self.type = random.choice(["grass","ore"])
 
     def update(self,screen,player_rect): #screen offsetting and other
@@ -22,5 +24,8 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
             touching.add(self)
         
     def draw(self,screen):
-        screen.blit(self.image,self.rect)
+        if not self.destroyed:
+            screen.blit(self.image,self.rect)
+    def updateDestroyed(self,isDestroyed):
+        self.destroyed = isDestroyed
 
