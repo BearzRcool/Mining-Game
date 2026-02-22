@@ -26,7 +26,7 @@ class Player():
     def update(self,screen,keys,blocks,drill,plane):
         self.speed.x = 0
         self.draw(screen)
-        #if pygame.event() #CHECK IF THERE IS AN INPUT FROM KEYBOARD AND RUN THE CEHCKS:
+
         if keys[pygame.K_RIGHT]:
             if drill.drill_state != 'right':
                 drill.drill_state = 'right'
@@ -61,6 +61,9 @@ class Player():
             drill.rect.x = self.rect.x - 5
             drill.rect.y = self.rect.y + 40
             drill.update(screen)
+        else:
+            drill.rect.x = 0
+            drill.rect.y = 0
             
         drill_check = self.drill_colliding(blocks,drill)
         if drill_check and drill_check.destructable == True:
