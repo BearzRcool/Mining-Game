@@ -70,7 +70,7 @@ for word in words:
     for letter in chars:
         if word == letter:
             num6 += letter
-print(num6)
+#print(num6)
 
 num7 = [1,2,3,4,5]
 def reverse(numbers):
@@ -155,11 +155,31 @@ def checkCreditCard(num):
     
     for i in range(len(num)):
         quad = num[i:i+4]
-        print(quad)
         try:
             if quad[0] == quad[1] == quad[2] == quad[3]:
                 return 'Not Valid'
         except:
             pass
     return "Valid"
-print(checkCreditCard(credit_card))
+#print(checkCreditCard(credit_card))
+words = ['Everywhen', 'Erf', 'Bumbershoot', 'Cleek', 'Finifugal']
+def Vowels(words):
+    answer = 0
+    for word in words:
+        
+        vowels = 0
+        for letter in word:
+            
+            if letter == 'a' or letter == 'e' or letter == 'i' or letter == 'o' or letter == 'u':
+                print("vowels: " + str(vowels))
+                vowels += 1
+        if vowels%2 == 0:
+            answer += 1
+        else:
+            answer += 2
+        print("answer: " + str(answer))
+    print(answer)
+Vowels(words)
+
+
+         
