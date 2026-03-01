@@ -169,17 +169,55 @@ def Vowels(words):
         
         vowels = 0
         for letter in word:
+            letter = letter.lower()
             
             if letter == 'a' or letter == 'e' or letter == 'i' or letter == 'o' or letter == 'u':
-                print("vowels: " + str(vowels))
+                
                 vowels += 1
         if vowels%2 == 0:
             answer += 1
         else:
             answer += 2
-        print("answer: " + str(answer))
+        
     print(answer)
-Vowels(words)
+#Vowels(words)
+ten_nums = [1,6,2,3,5,4,7,9,8,10]
+def FindMax(list):
+    biggest = 0
+    pos = 0
+    for i in range(len(list)):
+        if list[i] > biggest:
+            biggest = list[i]
+            pos = i
+
+    return pos
+def Bubble_sort(nums):
+    
+    repeats = 0
+    for i in range(len(nums)):
+        biggest = FindMax(nums[::len(nums)-repeats])
+        for number in range(biggest,len(nums)-repeats-1):
+            if nums[number+1] < nums[number]:
+                placeholder = nums[number+1]
+                nums[number+1] = nums[number]
+                nums[number] = placeholder
+        repeats += 1
+    print(nums)
+
+#Bubble_sort(ten_nums)
+'''
+finds biggest num, then moves to the last position in the list
+finds the second biggest num, then moves to second last in the list
+repeat until least to greatest
+did ^ without python libraries
+'''
 
 
-         
+
+radix_nums = [222,33,1]
+def Radix_sort(nums):
+    max_value = max(nums)
+    max_value_digits = str(max_value)
+    for i in range(len(max_value_digits)):
+        pass
+Radix_sort(radix_nums)
