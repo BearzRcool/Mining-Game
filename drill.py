@@ -11,6 +11,7 @@ class Drill(pygame.sprite.Sprite):
         self.rect.x = posx
         self.drill_state = ""
         self.original_image = self.image
+        self.drill_speed = 10
     
     def draw(self,screen):
         screen.blit(self.image,self.rect)

@@ -26,6 +26,11 @@ shop_sell_rect = shop_sell.get_rect()
 shop_sell_rect.x = 200
 shop_sell_rect.y = 300
 
+shop_buy = pygame.Surface((25,25))
+shop_buy.fill("red")
+shop_buy_rect = shop_buy.get_rect()
+shop_buy_rect.x = 150
+shop_buy_rect.y = 300
 #TEXT:
 font = pygame.font.SysFont("Arial", 20)
 
@@ -92,20 +97,24 @@ def MainScreen():
         player.colliding(c)
     player.update(screen,keys,blocks,drill,plane)
     
-    
-    
-def ShopScreen():
+#ALL THYE BUTTONS IN THE SHOP
+buttons = [shop_exit_rect,shop_sell_rect,shop_buy_rect]
+
+
+def ShopScreen(buttons,player):
     screen.blit(shop_background,(0,0))
     screen.blit(shop_exit, shop_exit_rect)
     screen.blit(shop_sell, shop_sell_rect)
-    shopkeeper.update(screen,player.rect, Player.money, shop_exit_rect,shop_sell_rect)
+    screen.blit(shop_buy, shop_buy_rect)
+
+    shopkeeper.update(screen,player.rect, Player.money, buttons,player)
 
 while True:
     if shopkeeper.gamemode == "main":
         MainScreen()
-        shopkeeper.update(screen,player.rect, Player.money, shop_exit_rect, shop_sell_rect)
+        shopkeeper.update(screen,player.rect, Player.money, buttons,player)
     elif shopkeeper.gamemode == "shop":
-        ShopScreen()
+        ShopScreen(buttons,player)
         
         
     

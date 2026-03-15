@@ -1,15 +1,19 @@
 import pygame
 import constants
 from block import Block
+import time
+
+
 
 class Player():
-    PLAYERSPEED = 5
+    #STATIC VARIABLES, AFFECTS EVERY OBJECT OF THIS CLASS
+    PlayerSpeed = 5
     inventory = []
     money = 0
     def __init__(self,posx,posy):
         #self.image = pygame.image.load("Images/player.png").convert_alpha()
         #self.image = pygame.transform.scale(self.image,(25,50))
-        self.image = pygame.Surface((25, 50))
+        self.image = pygame.Surface((25, 49.5))
         self.image.fill("red")
       
         self.rect = self.image.get_rect()
@@ -19,8 +23,11 @@ class Player():
         self.gravity = constants.GRAVITY
         self.original_pos = self.rect.y
         self.jump = False
+        
+
     def draw(self,screen):
         screen.blit(self.image,self.rect)
+        
 
         
     def update(self,screen,keys,blocks,drill,plane):
@@ -68,20 +75,27 @@ class Player():
         drill_check = self.drill_colliding(blocks,drill)
         if drill_check and drill_check.destructable == True:
             drill_check.x = 1000
-            
+            #CHANGE BLOCK COLOR WHEN DRILLING, 10sec
+            #IF STOP MINING, THEN SAVE BLOCK PROGRESS
+            length = len(drill_check.animation)
+            i = 0
+            drill_check.image.fill((0,150-i,0))
+            AnimationEvent = pygame.USEREVENT + 1
+            Event = pygame.event.Event(AnimationEvent,i+1)
+            pygame.time.set_timer(Event, drill.drill_speed*10**3, length)
+
             self.inventory.append(drill_check.type)
-            print("drill destroyed block")
             drill_check.destroyed = True
 
         #movement
         if keys[pygame.K_a]:
-            self.rect.x -= self.PLAYERSPEED
-            self.speed.x = -self.PLAYERSPEED
+            self.rect.x -= self.PlayerSpeed
+            self.speed.x = -self.PlayerSpeed
             if self.rect.x < 0:
                 self.rect.x = 0
         if keys[pygame.K_d]:
-            self.rect.x += self.PLAYERSPEED
-            self.speed.x += self.PLAYERSPEED
+            self.rect.x += self.PlayerSpeed
+            self.speed.x += self.PlayerSpeed
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
         if keys[pygame.K_s]:# and not self.onground(blocks):#placing block beneath you so no softlock, check if block beneath is beind drawn,s check if player.y - blocksize is a divisable by blocksize (%), and then move it to a placew where it is
@@ -90,6 +104,11 @@ class Player():
                     if self.rect.x > block.rect.left and self.rect.x < block.rect.right:   
                         if self.rect.bottom < block.rect.top and self.rect.bottom > block.rect.top - 25:
                             block.updateDestroyed(False)
+                            if block.type == 'grass':
+                                self.inventory.remove('grass')
+                            elif block.type == 'ore':
+                                self.inventory.remove('ore')
+
                            
                             
 

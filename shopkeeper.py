@@ -22,7 +22,7 @@ class Shop(pygame.sprite.Sprite):
     def draw(self,screen):
         screen.blit(self.image,self.rect)
 
-    def update(self,screen,player_rect,money,exit,sell):
+    def update(self,screen,player_rect,money,buttons, player):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -30,27 +30,28 @@ class Shop(pygame.sprite.Sprite):
             self.draw(screen)
         if self.rect.colliderect(player_rect):
             self.gamemode = 'shop'
-            self.shop(money,player_rect,exit,sell)
+            self.shop(money,player_rect,buttons,player)
     
-    def shop(self, money,player_rect, exit,sell):
+    def shop(self, money,player_rect,buttons,player):
+     
+        exit = buttons[0]
+        sell = buttons[1]
+        buy = buttons[2]
+
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-       
-        if exit.collidepoint(mouse):
-            if click[0]:
-                player_rect.x += 50  # Move player away from shopkeeper to avoid immediate re-entry
-                self.gamemode = "main"
-        elif sell.collidepoint(mouse):
-            if click[0]:
-                for item in Player.inventory:
-                    if item == 'grass':
-                        Player.money += 1
-                    elif item == 'ore':
-                        Player.money += 5
-                Player.inventory.clear()
-                print(Player.money)
-            
 
-        
-
-           
+        if click[0]:
+            if exit.collidepoint(mouse):
+                    player_rect.x += 50  # Move player away from shopkeeper to avoid immediate re-entry
+                    self.gamemode = "main"
+            elif sell.collidepoint(mouse):
+                    for item in Player.inventory:
+                        if item == 'grass':
+                            Player.money += 1
+                        elif item == 'ore':
+                            Player.money += 5
+                    Player.inventory.clear()
+            elif buy.collidepoint(mouse):
+                Player.PlayerSpeed += 1
+                print(Player.PlayerSpeed)
