@@ -218,6 +218,7 @@ radix_nums = [222,33,1]
 def Radix_sort(nums):
     max_value = max(nums)
     max_value_digits = str(max_value)
+    print(max_value)
     for i in range(len(max_value_digits)):
-        pass
+        print(nums[i])
 Radix_sort(radix_nums)
