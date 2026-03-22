@@ -9,7 +9,7 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         pygame.sprite.Sprite.__init__(self,blocks) #initializing the sprite class
         #self.image = pygame.image.load("Images/grass.png").convert_alpha()
         self.image = pygame.Surface((self.BLOCKSIZE, self.BLOCKSIZE))
-        self.image.fill("dark green")
+        self.image.fill("dark green") #(0,100,0)
         #self.image = pygame.transform.scale(self.image,(self.BLOCKSIZE,self.BLOCKSIZE))
         self.rect = self.image.get_rect()
         self.rect.x = posx
@@ -17,7 +17,10 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
         self.player = None
         self.destroyed = False
         self.destructable = destructable
-        self.animation = [] #folder of all the images
+        self.animation = [] #list of all the images
+
+        self.repeats = 0
+        self.colorChange = 0 #in place for animationbs rn
 
         self.type = random.choice(["grass","ore"])
 

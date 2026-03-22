@@ -67,7 +67,9 @@ def MainScreen():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
+
     keys = pygame.key.get_pressed()
+        
     if keys[pygame.K_m]:
             Player.money = 1000
 
@@ -115,6 +117,7 @@ while True:
         shopkeeper.update(screen,player.rect, Player.money, buttons,player)
     elif shopkeeper.gamemode == "shop":
         ShopScreen(buttons,player)
+        
         
         
     

@@ -2,6 +2,7 @@ import pygame
 import constants
 from block import Block
 import time
+from drill import Drill
 
 
 
@@ -23,6 +24,9 @@ class Player():
         self.gravity = constants.GRAVITY
         self.original_pos = self.rect.y
         self.jump = False
+        self.startTime = time.time()
+        self.timer = True
+
         
 
     def draw(self,screen):
@@ -31,6 +35,10 @@ class Player():
 
         
     def update(self,screen,keys,blocks,drill,plane):
+        if self.timer:
+            self.startTime = time.time()
+
+
         self.speed.x = 0
         self.draw(screen)
 
@@ -74,18 +82,36 @@ class Player():
             
         drill_check = self.drill_colliding(blocks,drill)
         if drill_check and drill_check.destructable == True:
+            self.timer = False
             drill_check.x = 1000
-            #CHANGE BLOCK COLOR WHEN DRILLING, 10sec
-            #IF STOP MINING, THEN SAVE BLOCK PROGRESS
+        
             length = len(drill_check.animation)
-            i = 0
-            drill_check.image.fill((0,150-i,0))
-            AnimationEvent = pygame.USEREVENT + 1
-            Event = pygame.event.Event(AnimationEvent,i+1)
-            pygame.time.set_timer(Event, drill.drill_speed*10**3, length)
+            length = 5 #change later
+            
+            
 
-            self.inventory.append(drill_check.type)
-            drill_check.destroyed = True
+            current = time.time()
+           
+
+            if current - self.startTime > Drill.drill_speed:
+                self.startTime = current
+                drill_check.colorChange += 10
+                drill_check.image.fill((0,100-drill_check.colorChange,0)) #drill_check.currentFrame = drill_check.animation[repeats]
+                drill_check.repeats+=1
+                
+            if drill_check.repeats == length:
+                self.inventory.append(drill_check.type)
+                drill_check.destroyed = True
+                self.timer = True
+                drill_check.repeats = 0
+                drill_check.colorChange = 0
+                drill_check.image.fill('dark green')
+        else:
+            for block in blocks:
+                block.image.fill('dark green')
+                block.repeats = 0
+                block.colorChange = 0
+
 
         #movement
         if keys[pygame.K_a]:
@@ -103,11 +129,12 @@ class Player():
                 if block.destroyed:
                     if self.rect.x > block.rect.left and self.rect.x < block.rect.right:   
                         if self.rect.bottom < block.rect.top and self.rect.bottom > block.rect.top - 25:
-                            block.updateDestroyed(False)
-                            if block.type == 'grass':
+                            if block.type == 'grass' and 'grass' in self.inventory:
                                 self.inventory.remove('grass')
-                            elif block.type == 'ore':
+                                block.updateDestroyed(False)
+                            elif block.type == 'ore' and 'ore' in self.inventory:
                                 self.inventory.remove('ore')
+                                block.updateDestroyed(False)
 
                            
                             
@@ -176,11 +203,13 @@ class Player():
                     if drill_left[1] >= block.rect.top and drill_left[1] <= block.rect.bottom:
                         if drill_left[0] <= block.rect.right and drill_left[0] >= block.rect.left:
                             return block #block you are drilling
+
                 if drill.drill_state == "right":
                     drill_right = drill.rect.midright
                     if drill_right[1] >= block.rect.top and drill_right[1] <= block.rect.bottom:
                         if drill_right[0] <= block.rect.right and drill_right[0] >= block.rect.left:
                             return block #block you are drilling
+                            
         return False
         
 

@@ -1,6 +1,7 @@
 import pygame
 import constants
 from player import Player
+from drill import Drill
 class Shop(pygame.sprite.Sprite):
     def __init__(self,posx,posy):
         #self.image = pygame.image.load("Images/shopkeeper.png").convert_alpha()
@@ -12,6 +13,8 @@ class Shop(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = posy
         self.rect.x = posx
+
+        self.click = False
         
         self.gamemode = ''
         self.items = {
@@ -23,27 +26,35 @@ class Shop(pygame.sprite.Sprite):
         screen.blit(self.image,self.rect)
 
     def update(self,screen,player_rect,money,buttons, player):
+        self.click = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.click = True
+                    
         if self.gamemode != 'shop':
             self.draw(screen)
         if self.rect.colliderect(player_rect):
             self.gamemode = 'shop'
-            self.shop(money,player_rect,buttons,player)
+        self.shop(money,player_rect,buttons,player)
     
     def shop(self, money,player_rect,buttons,player):
      
         exit = buttons[0]
         sell = buttons[1]
         buy = buttons[2]
+        
 
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-
-        if click[0]:
+        #hold = pygame.mouse.get_pressed()
+        
+        
+        if self.click:
+            print('clicking')
             if exit.collidepoint(mouse):
-                    player_rect.x += 50  # Move player away from shopkeeper to avoid immediate re-entry
+                    player_rect.x += 60  
                     self.gamemode = "main"
             elif sell.collidepoint(mouse):
                     for item in Player.inventory:
@@ -53,5 +64,5 @@ class Shop(pygame.sprite.Sprite):
                             Player.money += 5
                     Player.inventory.clear()
             elif buy.collidepoint(mouse):
-                Player.PlayerSpeed += 1
-                print(Player.PlayerSpeed)
+                Drill.drill_speed -= 0.1
+                
