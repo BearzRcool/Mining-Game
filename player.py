@@ -31,6 +31,26 @@ class Player():
 
     def draw(self,screen):
         screen.blit(self.image,self.rect)
+    
+    def onground(self, blocks, detection):
+        for block in blocks:
+            if not block.destroyed:
+                if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
+                    if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
+                        if detection == True:
+                            print(detection)
+                            self.rect.bottom = block.rect.top
+                            self.speed.y = 0
+                            break
+                        return block #block you are standing on
+                    
+                    if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
+                        if detection == True:
+                            print(detection)
+                            self.rect.bottom = block.rect.top
+                            self.speed.y = 0
+                        return block #block you are standing on
+        return False
         
 
         
@@ -124,8 +144,7 @@ class Player():
             self.speed.x += self.PlayerSpeed
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
-        if keys[pygame.K_s]:# and not self.onground(blocks):#placing block beneath you so no softlock, check if block beneath is beind drawn,s check if player.y - blocksize is a divisable by blocksize (%), and then move it to a placew where it is
-            for block in blocks:
+        if keys[pygame.K_s]:
                 if block.destroyed:
                     if self.rect.x > block.rect.left and self.rect.x < block.rect.right:   
                         if self.rect.bottom < block.rect.top and self.rect.bottom > block.rect.top - 25:
@@ -140,37 +159,30 @@ class Player():
                             
 
         #jump
-        if keys[pygame.K_w] and self.onground(blocks):
+        if keys[pygame.K_w] and self.onground(blocks, False):
             self.speed.y = constants.PLAYERVELOCITY
             self.jump = True
     
-        if not self.onground(blocks):
+        if not self.onground(blocks, False):
             self.jump = True
 
         if self.jump:
             self.jumping(blocks)
 
+        self.onground(blocks, True)
     def jumping(self, blocks):
         if self.speed.y <= -5:
             self.speed.y = -5
         self.rect.y -= self.speed.y
         self.speed.y -= self.gravity
         
-        if self.onground(blocks):
+        if self.onground(blocks, False):
             self.speed.y = 0
             self.jump = False
 
-    def onground(self, blocks):
-        for block in blocks:
-            if not block.destroyed:
-                if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
-                    if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
-                        return block #block you are standing on
-                    if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
-                        return block #block you are standing on
-        return False
     
-    def colliding(self, block):
+    
+    def colliding(self, block): #check if falling, then check if colliding
         if not block.destroyed:
             if self.speed.x >= self.rect.right - block.rect.left:
                 self.speed.x = 0
@@ -178,13 +190,26 @@ class Player():
             if self.speed.x <= self.rect.left - block.rect.right:
                 self.speed.x = 0
                 self.rect.left = block.rect.right+1
-            if self.speed.y >= self.rect.bottom - block.rect.top:
+            if self.speed.y >= self.rect.bottom - block.rect.top: 
+                print("standing on something")
                 self.speed.y = 0
                 self.rect.bottom = block.rect.top
             if self.speed.y >= block.rect.bottom - self.rect.top:
                 self.speed.y = 0
                 self.rect.top = block.rect.bottom
+            '''
+            Falling onto platform
+            if player.speed.y > 0 and player.bottom <= block.bottom:
+                player.bottom = block.top
+                player.speed.y = 0
+                jumping = false
+
+            # hitting bottom of playform
+            elif player.speed.y < 0 and player.top >= block.top:
+                player.top = platform.bottom
+                player.speed.y = 0
             
+            '''
     def drill_colliding(self,blocks,drill): #return a block
         for block in blocks:
             if not block.destroyed:

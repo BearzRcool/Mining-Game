@@ -1,7 +1,7 @@
 import pygame
 import constants
 class Drill(pygame.sprite.Sprite):
-    drill_speed = 1
+    drill_speed = 0.1
     def __init__(self,posx,posy):
         self.image = pygame.image.load("Images/drill.png").convert_alpha()
         self.image = pygame.transform.scale(self.image,(33,33))
