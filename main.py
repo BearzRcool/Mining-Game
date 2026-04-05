@@ -118,4 +118,4 @@ while True:
     pygame.display.update()
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(20)

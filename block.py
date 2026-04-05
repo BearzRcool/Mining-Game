@@ -26,14 +26,27 @@ class Block(pygame.sprite.Sprite): #calling the built in pygame sprite class
 
     def update(self,screen,player): #screen offsetting and other
         self.draw(screen)
-        if self.rect.colliderect(player.rect) and self.destroyed == False:
-            print("block is touchging player")
-            touching.add(self)
-        # elif 1 <= player.rect.bottom - self.rect.top and self.destroyed == False:
-        #     if player.rect.bottom <= self.rect.top and player.rect.bottom >= self.rect.top:
-        #             if player.rect.left <= self.rect.right and player.rect.left >= self.rect.left:
+        # if self.destroyed:
+        #     return
+        # if player.speed.x >= player.rect.right - self.rect.left:
+        #     player.speed.x = 0
+        #     player.rect.right = self.rect.left-1
+        # if player.speed.x <= player.rect.left - self.rect.right:
+        #     player.speed.x = 0
+        #     player.rect.left = self.rect.right+1
+        # if player.speed.y >= player.rect.bottom - self.rect.top: 
+        #     print("standing on something")
         #     player.speed.y = 0
-        #     player.rect.y = self.rect.y-1
+        #     player.rect.bottom = self.rect.top
+        # if player.speed.y >= self.rect.bottom - player.rect.top:
+        #     player.speed.y = 0
+        #     player.rect.top = self.rect.bottom
+        if self.rect.colliderect(player.rect) and self.destroyed == False:
+            
+            touching.add(self)
+
+        
+        
         
     def draw(self,screen):
         if not self.destroyed:

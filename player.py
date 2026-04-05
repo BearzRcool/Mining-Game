@@ -38,7 +38,7 @@ class Player():
                 if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
                     if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
                         if detection == True:
-                            print(detection)
+                            
                             self.rect.bottom = block.rect.top
                             self.speed.y = 0
                             break
@@ -46,7 +46,7 @@ class Player():
                     
                     if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
                         if detection == True:
-                            print(detection)
+                            
                             self.rect.bottom = block.rect.top
                             self.speed.y = 0
                         return block #block you are standing on
@@ -55,6 +55,7 @@ class Player():
 
         
     def update(self,screen,keys,blocks,drill,plane):
+        
         if self.timer:
             self.startTime = time.time()
 
@@ -182,21 +183,28 @@ class Player():
 
     
     
-    def colliding(self, block): #check if falling, then check if colliding
+    def colliding(self, block): #print out the block edges to check hitboxes to check if there is slight edge overlapping, can fix by making the top check smaller
         if not block.destroyed:
+            
             if self.speed.x >= self.rect.right - block.rect.left:
                 self.speed.x = 0
-                self.rect.right = block.rect.left-1
+                self.rect.right = block.rect.left
             if self.speed.x <= self.rect.left - block.rect.right:
                 self.speed.x = 0
-                self.rect.left = block.rect.right+1
-            if self.speed.y >= self.rect.bottom - block.rect.top: 
-                print("standing on something")
+                self.rect.left = block.rect.right
+            
+            if abs(self.speed.y) >= self.rect.bottom - block.rect.top: 
                 self.speed.y = 0
                 self.rect.bottom = block.rect.top
+            print(f"checking player y = {self.speed.y} >= {block.rect.bottom} - {self.rect.top}")
+            #if you are about to hit your head:
             if self.speed.y >= block.rect.bottom - self.rect.top:
                 self.speed.y = 0
                 self.rect.top = block.rect.bottom
+            #if you are already inside the block:
+            if self.rect.top < block.rect.bottom and (self.rect.left < block.rect.right or self.rect.right > block.rect.left) and self.jump and self.rect.bottom > block.rect.bottom:
+                self.speed.y = 0
+                # self.rect.top = block.rect.bottom
             '''
             Falling onto platform
             if player.speed.y > 0 and player.bottom <= block.bottom:
