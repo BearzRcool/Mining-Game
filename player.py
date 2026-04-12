@@ -8,7 +8,7 @@ from drill import Drill
 
 class Player():
     #STATIC VARIABLES, AFFECTS EVERY OBJECT OF THIS CLASS
-    PlayerSpeed = 0
+    PlayerSpeed = 5
     inventory = []
     money = 0
     def __init__(self,posx,posy):
@@ -132,7 +132,7 @@ class Player():
 
 
         #movement
-        
+        ''' new stuff, didnt work
         if keys[pygame.K_a]:
             self.speed.x = -5
             if self.rect.x < 0:
@@ -143,6 +143,19 @@ class Player():
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
         self.rect.x += self.PlayerSpeed
+        '''
+        if keys[pygame.K_a]:
+            
+            self.rect.x -= self.PlayerSpeed
+            self.speed.x = -self.PlayerSpeed
+            if self.rect.x < 0:
+                self.rect.x = 0
+        if keys[pygame.K_d]:
+            
+            self.rect.x += self.PlayerSpeed
+            self.speed.x += self.PlayerSpeed
+            if self.rect.x > constants.SCREENWIDTH-25:
+                self.rect.x = constants.SCREENWIDTH-25
         if keys[pygame.K_s]:
                 for block in blocks:
                     if block.destroyed:
