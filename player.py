@@ -34,21 +34,21 @@ class Player():
     
     def onground(self, blocks, detection):
         for block in blocks:
-            if not block.destroyed:
+            if not block.destroyed: #and block.rect.top - self.rect.bottom > self.speed.y:
                 if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
                     if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
-                        if detection == True:
+                        # if detection == True:
                             
-                            self.rect.bottom = block.rect.top
-                            self.speed.y = 0
-                            break
+                        #     self.rect.bottom = block.rect.top
+                        #     self.speed.y = 0
+                        #     break
                         return block #block you are standing on
                     
                     if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
-                        if detection == True:
+                        # if detection == True:
                             
-                            self.rect.bottom = block.rect.top
-                            self.speed.y = 0
+                        #     self.rect.bottom = block.rect.top
+                        #     self.speed.y = 0
                         return block #block you are standing on
         return False
         
@@ -205,19 +205,8 @@ class Player():
             if self.rect.top < block.rect.bottom and (self.rect.left < block.rect.right or self.rect.right > block.rect.left) and self.jump and self.rect.bottom > block.rect.bottom:
                 self.speed.y = 0
                 # self.rect.top = block.rect.bottom
-            '''
-            Falling onto platform
-            if player.speed.y > 0 and player.bottom <= block.bottom:
-                player.bottom = block.top
-                player.speed.y = 0
-                jumping = false
-
-            # hitting bottom of playform
-            elif player.speed.y < 0 and player.top >= block.top:
-                player.top = platform.bottom
-                player.speed.y = 0
-            
-            '''
+           
+        
     def drill_colliding(self,blocks,drill): #return a block
         for block in blocks:
             if not block.destroyed:
