@@ -8,7 +8,7 @@ from drill import Drill
 
 class Player():
     #STATIC VARIABLES, AFFECTS EVERY OBJECT OF THIS CLASS
-    PlayerSpeed = 5
+    PlayerSpeed = 0
     inventory = []
     money = 0
     def __init__(self,posx,posy):
@@ -27,6 +27,8 @@ class Player():
         self.startTime = time.time()
         self.timer = True
 
+        self.PrevKey = None
+
         
 
     def draw(self,screen):
@@ -37,19 +39,14 @@ class Player():
             if not block.destroyed: #and block.rect.top - self.rect.bottom > self.speed.y:
                 if self.rect.bottom <= block.rect.top and self.rect.bottom >= block.rect.top:
                     if self.rect.left <= block.rect.right and self.rect.left >= block.rect.left:
-                        # if detection == True:
-                            
-                        #     self.rect.bottom = block.rect.top
-                        #     self.speed.y = 0
-                        #     break
-                        return block #block you are standing on
+                        if detection == True:
+                            return block #block you are standing on
+                        return True
                     
                     if self.rect.right >= block.rect.left and self.rect.right <= block.rect.right:
-                        # if detection == True:
-                            
-                        #     self.rect.bottom = block.rect.top
-                        #     self.speed.y = 0
-                        return block #block you are standing on
+                        if detection == True:
+                            return block
+                        return True #block you are standing on
         return False
         
 
@@ -135,49 +132,51 @@ class Player():
 
 
         #movement
+        
         if keys[pygame.K_a]:
-            self.rect.x -= self.PlayerSpeed
-            self.speed.x = -self.PlayerSpeed
+            self.speed.x = -5
             if self.rect.x < 0:
                 self.rect.x = 0
         if keys[pygame.K_d]:
-            self.rect.x += self.PlayerSpeed
-            self.speed.x += self.PlayerSpeed
+            
+            self.speed.x = 5
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
+        self.rect.x += self.PlayerSpeed
         if keys[pygame.K_s]:
-                if block.destroyed:
-                    if self.rect.x > block.rect.left and self.rect.x < block.rect.right:   
-                        if self.rect.bottom < block.rect.top and self.rect.bottom > block.rect.top - 25:
-                            if block.type == 'grass' and 'grass' in self.inventory:
-                                self.inventory.remove('grass')
-                                block.updateDestroyed(False)
-                            elif block.type == 'ore' and 'ore' in self.inventory:
-                                self.inventory.remove('ore')
-                                block.updateDestroyed(False)
+                for block in blocks:
+                    if block.destroyed:
+                        if self.rect.x > block.rect.left and self.rect.x < block.rect.right:   
+                            if self.rect.bottom < block.rect.top and self.rect.bottom > block.rect.top - 25:
+                                if block.type == 'grass' and 'grass' in self.inventory:
+                                    self.inventory.remove('grass')
+                                    block.updateDestroyed(False)
+                                elif block.type == 'ore' and 'ore' in self.inventory:
+                                    self.inventory.remove('ore')
+                                    block.updateDestroyed(False)
 
                            
                             
 
         #jump
-        if keys[pygame.K_w] and self.onground(blocks, False):
+        if keys[pygame.K_w] and self.onground(blocks, True):
             self.speed.y = constants.PLAYERVELOCITY
             self.jump = True
     
-        if not self.onground(blocks, False):
+        if not self.onground(blocks, True):
             self.jump = True
 
         if self.jump:
             self.jumping(blocks)
 
-        self.onground(blocks, True)
+        
     def jumping(self, blocks):
         if self.speed.y <= -5:
             self.speed.y = -5
         self.rect.y -= self.speed.y
         self.speed.y -= self.gravity
         
-        if self.onground(blocks, False):
+        if self.onground(blocks, True):
             self.speed.y = 0
             self.jump = False
 
