@@ -11,18 +11,21 @@ class Player():
     PlayerSpeed = 5
     inventory = []
     money = 0
+    w = 25
+    h = 49.5
     def __init__(self,posx,posy):
         #self.image = pygame.image.load("Images/player.png").convert_alpha()
         #self.image = pygame.transform.scale(self.image,(25,50))
-        self.image = pygame.Surface((25, 49.5))
+        self.image = pygame.Surface((self.w, self.h))
         self.image.fill("red")
       
         self.rect = self.image.get_rect()
         self.rect.x = posx
         self.rect.y = posy
         self.speed = pygame.Vector2()
+        self.next = pygame.Vector2()
         self.gravity = constants.GRAVITY
-        self.original_pos = self.rect.y
+        
         self.jump = False
         self.startTime = time.time()
         self.timer = True
@@ -146,14 +149,17 @@ class Player():
         '''
         if keys[pygame.K_a]:
             
-            self.rect.x -= self.PlayerSpeed
+           
             self.speed.x = -self.PlayerSpeed
+            self.rect.x += self.speed.x
             if self.rect.x < 0:
                 self.rect.x = 0
         if keys[pygame.K_d]:
             
-            self.rect.x += self.PlayerSpeed
-            self.speed.x += self.PlayerSpeed
+            
+            self.speed.x = self.PlayerSpeed
+            self.rect.x += self.speed.x
+
             if self.rect.x > constants.SCREENWIDTH-25:
                 self.rect.x = constants.SCREENWIDTH-25
         if keys[pygame.K_s]:
@@ -170,7 +176,7 @@ class Player():
 
                            
                             
-
+        print(self.speed)
         #jump
         if keys[pygame.K_w] and self.onground(blocks, True):
             self.speed.y = constants.PLAYERVELOCITY
@@ -182,18 +188,39 @@ class Player():
         if self.jump:
             self.jumping(blocks)
 
+        self.testCollision(blocks)
         
     def jumping(self, blocks):
-        if self.speed.y <= -5:
-            self.speed.y = -5
+        # if self.speed.y <= -5:
+        #     self.speed.y = -5
         self.rect.y -= self.speed.y
         self.speed.y -= self.gravity
-        
-        if self.onground(blocks, True):
+        block = self.onground(blocks,True)
+        if block:
             self.speed.y = 0
+            self.rect.y = block.rect.y - (block.BLOCKSIZE)
             self.jump = False
-
     
+
+    def testCollision(self,blocks):
+        for block in blocks:
+            if not block.destroyed:
+                if block.rect.colliderect(self.rect):
+                    if self.speed.x > 0 and self.rect.x > block.rect.x - (block.BLOCKSIZE / 2): #rigjht
+                        self.speed.x = 0
+                        self.rect.x = block.rect.x - (block.BLOCKSIZE/2)
+                        print("colliding right")
+                    if self.speed.x < 0 and self.rect.x > block.rect.x - (block.BLOCKSIZE / 2): #left
+                        self.speed.x = 0
+                        self.rect.x = block.rect.x + (block.BLOCKSIZE)
+                        print("colliding leftrr")
+                    if self.speed.y > 0 and self.rect.y > block.rect.y - (block.BLOCKSIZE / 2): #up
+                        self.rect.y = block.rect.y + (block.BLOCKSIZE / 2)
+                        self.speed.y = 0
+                    # if self.speed.y < 0 and self.rect.y > block.rect.y - (block.BLOCKSIZE / 2): #down
+                    #     self.rect.y = block.rect.y - (block.BLOCKSIZE / 2)
+
+
     
     def colliding(self, block): #print out the block edges to check hitboxes to check if there is slight edge overlapping, can fix by making the top check smaller
         if not block.destroyed:

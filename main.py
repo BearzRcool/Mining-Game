@@ -89,8 +89,8 @@ def MainScreen():
     screen.blit(text_surface2, (0,25))
     screen.blit(text_surface3, (0,50))
     blocks.update(screen,player)
-    for c in touching:
-        player.colliding(c)
+    #for c in touching:
+      #  player.colliding(c)
     player.update(screen,keys,blocks,drill,plane)
     
 #ALL THYE BUTTONS IN THE SHOP
@@ -108,7 +108,7 @@ def ShopScreen(buttons,player):
 while True:
     if shopkeeper.gamemode == "main":
         MainScreen()
-        shopkeeper.update(screen,player.rect, Player.money, buttons,player)
+        #shopkeeper.update(screen,player.rect, Player.money, buttons,player)
     elif shopkeeper.gamemode == "shop":
         ShopScreen(buttons,player)
         
@@ -118,4 +118,4 @@ while True:
     pygame.display.update()
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(30)
